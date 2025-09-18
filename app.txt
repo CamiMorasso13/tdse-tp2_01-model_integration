@@ -1,0 +1,17 @@
+En main.c se inicializa el programa y es utilizados para llamar al app.c para ejecutar el programa.
+
+En app.c comienza realizando las declaraciones de variables:
+ 
+const char : *p_sys y *p_app
+uint32_t : WCET, index, g_app_cnt , g_app_runtime_us y g_app_tick_cnt
+task_dta_t: task_dta_list[TASK_QTY]
+
+g_app_runtime_us empieza declarado con el valor 0 y va incrementando tomando el valor del tiempo en micro segundos
+que el programa esta en un loop
+
+Luego comienza la funcion app_init() que inicia mostrando los logs iniciales y comenzando los contadores g_app_cnt y g_app_tick_cnt, 
+inicializa el WCET de cada tarea en 0, y pone el resto de los contadores en 0
+
+Continua con la funcion app_update la cual establece un booleano que considera si la app requiere una actualizacion o no, la requiere si G_APP_TICK_CNT_INI < g_app_tick_cnt, 
+cuando la requiere aumenta el contador g_app_cnt y vuelve a cero el g_app_runtime_us y luego hasta que el index sea igual al TASK_QTY aumenta el g_app_runtime_us contando los ciclos
+y actualiza el WCET
