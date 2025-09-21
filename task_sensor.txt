@@ -52,3 +52,31 @@
  1) task_sensor_cfg_t -> Parametros configurables de cada entrada (identificador, pines, eventos a emitir, etc)
  
  2) task_sensor_dta_t -> Datos por cada entrada (contadores tipo guard, estados y eventos)
+
+ ---------------------------------------------------------------------------------------------------------------------------
+ 
+task_sensor.png
+
+Máquina de estados finita que modela el comportamiento de un botón (sensor), implementada en itemis CREATE.
+
+Estados:
+- ST_BTN_XX_UP -> el botón está suelto (reposo).
+- ST_BTN_XX_DOWN -> el botón está presionado.
+- ST_BTN_XX_RISING -> transición desde presionado hacia suelto (liberación).
+- ST_BTN_XX_FALLING -> transición desde suelto hacia presionado (pulsación).
+
+Eventos:
+- EV_BTN_XX_HOVER -> hover detectado.
+- EV_BTN_XX_PRESSED -> botón presionado.
+Equivalentes a constantes enteras enumeradas (enum) en C.
+
+Acciones:
+tick = DEL_BTN_XX_MAX -> inicializa un temporizador al valor máximo permitido.
+tick-- -> decrementa ese temporizador mientras dure la transición.
+raise EV_SYS_XX_IDLE, raise EV_SYS_XX_ACTIVE -> generan eventos internos para notificar a otras partes del sistema.
+Corresponden con asignaciones a variables y disparos de eventos.
+
+Tipos de datos:
+tick: entero que actúa como contador/temporizador.
+Constantes: DEL_BTN_XX_MAX, DEL_BTN_XX_MIN: límites de tiempo configurados (#define o const uint32_t).
+Eventos: Representados como banderas booleanas o como valores de un enum.
